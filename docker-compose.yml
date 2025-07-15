@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    container_name: nimble-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nimble

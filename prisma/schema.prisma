@@ -6,3 +6,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String @id
+  email        String @unique
+  refreshToken String @map("refresh_token")
+
+  createdAt    DateTime      @default(now()) @map("created_at")
+  applications Application[]
+
+  @@map("users")
+}
+
+model Application {
+  id      String @id @default(cuid())
+  ownerId String @map("owner_id")
+  name    String
+
+  ram Int
+  cpu Int
+
+  owner User @relation(fields: [ownerId], references: [id])
+}
