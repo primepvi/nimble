@@ -1,7 +1,9 @@
 import fastify from 'fastify';
 import { ZodError } from 'zod';
+import { DiscordRoutes } from './controllers/discord';
 
 export const app = fastify();
+app.register(DiscordRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof Error) {

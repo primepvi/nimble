@@ -23,6 +23,7 @@
   "dependencies": {
     "@kauzx/logger": "^1.2.0",
     "@prisma/client": "^6.11.1",
+    "discord-oauth2": "^2.12.1",
     "fastify": "^5.4.0",
     "zod": "^4.0.5"
   }

@@ -10,7 +10,8 @@
       "style": {
         "useConsistentMemberAccessibility": "off",
         "useBlockStatements": "info",
-        "noNestedTernary": "off"
+        "noNestedTernary": "off",
+        "noParameterProperties": "off"
       },
       "nursery": {
         "noAwaitInLoop": "off"
