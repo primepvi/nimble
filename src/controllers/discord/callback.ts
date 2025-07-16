@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
+import { makeUpsertUserUseCase } from '@/use-cases/factories/make-upsert-user';
 import type { DiscordOAuth2Service } from '../../services/discord-oauth2';
 
 const callbackSchema = z.object({
@@ -11,10 +12,23 @@ export class DiscordAuthCallbackController {
 
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const { code } = callbackSchema.parse(request.query);
-    const payload = await this.authenticator.getUserAndTokenPayload(code);
+    const { user: discordUser, payload } =
+      await this.authenticator.getUserAndTokenPayload(code);
+    const { id, email } = discordUser;
 
-    console.log(payload);
+    if (!email) {
+      return reply
+        .status(400)
+        .send({ error: true, message: 'Invalid email has provided.' });
+    }
 
-    return reply.status(201);
+    const upsertUseCase = makeUpsertUserUseCase();
+    const { user } = await upsertUseCase.handle({
+      id,
+      email,
+      refreshToken: payload.refresh_token,
+    });
+
+    return reply.status(201).send(user);
   }
 }
