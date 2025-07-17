@@ -1,4 +1,6 @@
-import OAuth from 'discord-oauth2';
+import axios from 'axios';
+
+const DISCORD_API_URL = 'https://discord.com/api';
 
 export interface DiscordOAuth2ServiceConfig {
   clientId: string;
@@ -7,30 +9,58 @@ export interface DiscordOAuth2ServiceConfig {
   scopes: string[];
 }
 
-export class DiscordOAuth2Service {
-  private authenticator: OAuth;
+export interface DiscordAccessTokenPayload {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+}
 
-  public constructor(private config: DiscordOAuth2ServiceConfig) {
-    this.authenticator = new OAuth(config);
-  }
+export interface DiscordUserPayload {
+  id: string;
+  username: string;
+  email?: string;
+}
+
+export class DiscordOAuth2Service {
+  public constructor(public config: DiscordOAuth2ServiceConfig) {}
 
   public async generateAuthUrl() {
-    return this.authenticator.generateAuthUrl({
-      scope: this.config.scopes,
-      clientId: this.config.clientId,
-      redirectUri: this.config.redirectUri,
+    const params = new URLSearchParams({
+      scope: this.config.scopes.join(' '),
+      client_id: this.config.clientId,
+      redirect_uri: this.config.redirectUri,
+      response_type: 'code',
     });
+
+    return `${DISCORD_API_URL}/oauth2/authorize?${params.toString()}`;
   }
 
-  public async getUserAndTokenPayload(code: string) {
-    const payload = await this.authenticator.tokenRequest({
-      grantType: 'authorization_code',
-      scope: this.config.scopes,
+  public async fetchToken(code: string) {
+    const body = new URLSearchParams({
+      grant_type: 'authorization_code',
+      client_id: this.config.clientId,
+      client_secret: this.config.clientSecret,
+      redirect_uri: this.config.redirectUri,
       code,
     });
 
-    const user = await this.authenticator.getUser(payload.access_token);
+    const { data } = await axios.post(`${DISCORD_API_URL}/oauth2/token`, body, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
 
-    return { user, payload };
+    return data as DiscordAccessTokenPayload;
+  }
+
+  public async fetchUser(accessToken: string) {
+    const { data } = await axios.get(`${DISCORD_API_URL}/users/@me`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return data as DiscordUserPayload;
   }
 }

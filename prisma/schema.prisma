@@ -8,14 +8,38 @@ datasource db {
 }
 
 model User {
-  id           String @id
-  email        String @unique
-  refreshToken String @map("refresh_token")
+  id    String @id @default(cuid())
+  email String @unique
 
-  createdAt    DateTime      @default(now()) @map("created_at")
   applications Application[]
+  connections  Connection[]
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("users")
+}
+
+enum ConnectionProvider {
+  Github
+  Discord
+}
+
+model Connection {
+  id                String             @id @default(cuid())
+  userId            String             @map("user_id")
+  provider          ConnectionProvider
+  providerAccountId String             @map("provider_account_id")
+  scope             String?
+
+  accessToken  String  @map("access_token")
+  refreshToken String? @map("refresh_token")
+
+  expiresAt DateTime? @map("expires_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+  @@map("connections")
 }
 
 model Application {

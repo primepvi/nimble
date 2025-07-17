@@ -1,20 +1,34 @@
-import type { Prisma, PrismaClient } from '@prisma/client';
+import type { Prisma, PrismaClient, User } from '@prisma/client';
+import type { UsersRepository } from '../users-repository';
 
-export class PrismaUsersRepository {
+export class PrismaUsersRepository implements UsersRepository {
   public constructor(private prisma: PrismaClient) {}
 
-  public async upsert(data: Prisma.UserUncheckedCreateInput) {
-    const user = await this.prisma.user.upsert({
-      where: {
-        id: data.id,
-      },
-      create: data,
-      update: {
-        email: data.email,
-        refreshToken: data.refreshToken,
-      },
+  public async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
+    return await this.prisma.user.create({
+      data,
     });
+  }
 
-    return user;
+  public async update(
+    id: string,
+    data: Prisma.UserUncheckedUpdateInput
+  ): Promise<User> {
+    return await this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  public async findById(id: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
+
+  public async findByEmail(email: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { email },
+    });
   }
 }
