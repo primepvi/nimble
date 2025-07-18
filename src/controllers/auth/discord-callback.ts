@@ -41,13 +41,15 @@ export class DiscordAuthCallbackController {
         id: connection.userId,
       });
 
-      // TODO: update connection
+      // TODO: Update tokens and scopes.
 
       return reply.status(200).send({ user, connection });
     }
 
     const createUserUseCase = makeCreateUserUseCase();
     const { user: createdUser } = await createUserUseCase.handle({ email });
+
+    // TODO: Encrypt access and refresh tokens before storing them in the database.
 
     const createConnectionUseCase = makeCreateConnectionUseCase();
     const { connection: createdConnection } =

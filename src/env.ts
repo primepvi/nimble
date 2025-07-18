@@ -11,6 +11,11 @@ const envSchema = z.object({
   DISCORD_OAUTH2_REDIRECT: z.url(),
   DISCORD_CLIENT_SECRET: z.string(),
   DISCORD_CLIENT_ID: z.string(),
+
+  // GITHUB
+  GITHUB_OAUTH2_REDIRECT: z.url(),
+  GITHUB_CLIENT_SECRET: z.string(),
+  GITHUB_CLIENT_ID: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

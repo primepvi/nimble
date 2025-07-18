@@ -1,0 +1,68 @@
+import axios from 'axios';
+
+const GITHUB_OAUTH2_URL = 'https://github.com/login';
+const GITHUB_API_URL = 'https://api.github.com';
+
+export interface GithubOAuth2ServiceConfig {
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  scopes: string[];
+}
+
+export interface GithubAccessTokenPayload {
+  access_token: string;
+  scope: string;
+}
+
+export interface GithubUserPayload {
+  id: string;
+  login: string;
+  email: string;
+}
+
+export class GithubOAuth2Service {
+  public constructor(public config: GithubOAuth2ServiceConfig) {}
+
+  public async generateAuthUrl() {
+    const params = new URLSearchParams({
+      scope: this.config.scopes.join(' '),
+      client_id: this.config.clientId,
+      redirect_uri: this.config.redirectUri,
+    });
+
+    return `${GITHUB_OAUTH2_URL}/authorize?${params.toString()}`;
+  }
+
+  public async fetchToken(code: string) {
+    const body = new URLSearchParams({
+      client_id: this.config.clientId,
+      client_secret: this.config.clientSecret,
+      redirect_uri: this.config.redirectUri,
+      code,
+    });
+
+    const { data } = await axios.post(
+      `${GITHUB_OAUTH2_URL}/access_token`,
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
+
+    return data as GithubAccessTokenPayload;
+  }
+
+  public async fetchUser(accessToken: string) {
+    const { data } = await axios.get(`${GITHUB_API_URL}/user`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+
+    return data as GithubUserPayload;
+  }
+}
