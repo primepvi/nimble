@@ -55,9 +55,8 @@ model Application {
   slug       String
   repository String
 
-  ram  Int
-  cpu  Int
-  port Int
+  ram Int
+  cpu Int
 
   owner User @relation(fields: [ownerId], references: [id])
 }
