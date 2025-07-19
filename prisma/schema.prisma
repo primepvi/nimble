@@ -42,10 +42,15 @@ model Connection {
   @@map("connections")
 }
 
+enum ApplicationImage {
+  Node
+}
+
 model Application {
-  id          String  @id @default(cuid())
-  ownerId     String  @map("owner_id")
-  containerId String? @map("container_id")
+  id          Int              @id @default(autoincrement())
+  ownerId     String           @map("owner_id")
+  containerId String?          @map("container_id")
+  image       ApplicationImage
 
   slug       String
   repository String
