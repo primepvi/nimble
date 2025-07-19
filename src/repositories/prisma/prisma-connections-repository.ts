@@ -13,9 +13,9 @@ export class PrismaConnectionsRepository implements ConnectionsRepository {
     provider: ConnectionProvider,
     accountId: string
   ): Promise<Connection | null> {
-    return await this.prisma.connection.findUnique({
+    return await this.prisma.connection.findFirst({
       where: {
-        id: accountId,
+        providerAccountId: accountId,
         provider,
       },
     });

@@ -41,13 +41,16 @@ export class DiscordAuthCallbackController {
         id: connection.userId,
       });
 
+      const token = await reply.jwtSign({}, { sign: { sub: user.id } });
+
       // TODO: Update tokens and scopes.
 
-      return reply.status(200).send({ user, connection });
+      return reply.status(200).send({ user, connection, token });
     }
 
     const createUserUseCase = makeCreateUserUseCase();
     const { user: createdUser } = await createUserUseCase.handle({ email });
+    const jwtToken = await reply.jwtSign({}, { sign: { sub: createdUser.id } });
 
     // TODO: Encrypt access and refresh tokens before storing them in the database.
 
@@ -63,8 +66,10 @@ export class DiscordAuthCallbackController {
         scope: this.authenticator.config.scopes.join(' '),
       });
 
-    return reply
-      .status(201)
-      .send({ user: createdUser, connection: createdConnection });
+    return reply.status(201).send({
+      user: createdUser,
+      connection: createdConnection,
+      token: jwtToken,
+    });
   }
 }
