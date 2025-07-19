@@ -6,6 +6,7 @@ import { makeCreateConnectionUseCase } from '@/use-cases/factories/make-create-c
 import { makeCreateUserUseCase } from '@/use-cases/factories/make-create-user';
 import { makeFindConnectionByAccountUseCase } from '@/use-cases/factories/make-find-connection-by-account';
 import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user';
+import { makeUpdateConnectionUseCase } from '@/use-cases/factories/make-update-connection';
 import type { DiscordOAuth2Service } from '../../services/discord-oauth2';
 
 const callbackSchema = z.object({
@@ -43,7 +44,17 @@ export class DiscordAuthCallbackController {
 
       const token = await reply.jwtSign({}, { sign: { sub: user.id } });
 
-      // TODO: Update tokens and scopes.
+      // TODO: Encrypt access and refresh tokens before storing them in the database.
+      const updateConnectionUseCase = makeUpdateConnectionUseCase();
+      await updateConnectionUseCase.handle({
+        id: connection.id,
+        newConnectionData: {
+          accessToken: payload.access_token,
+          refreshToken: payload.refresh_token,
+          expiresAt: new Date(Date.now() + payload.expires_in * 1000),
+          scope: this.authenticator.config.scopes.join(' '),
+        },
+      });
 
       return reply.status(200).send({ user, connection, token });
     }

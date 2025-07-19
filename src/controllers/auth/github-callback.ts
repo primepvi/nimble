@@ -7,6 +7,7 @@ import { makeCreateConnectionUseCase } from '@/use-cases/factories/make-create-c
 import { makeCreateUserUseCase } from '@/use-cases/factories/make-create-user';
 import { makeFindConnectionByAccountUseCase } from '@/use-cases/factories/make-find-connection-by-account';
 import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user';
+import { makeUpdateConnectionUseCase } from '@/use-cases/factories/make-update-connection';
 
 const callbackSchema = z.object({
   code: z.string(),
@@ -35,8 +36,6 @@ export class GithubAuthCallbackController {
       providerAccountId: id.toString(),
     });
 
-    console.log(connection, id.toString());
-
     if (connection) {
       const getUserUseCase = makeGetUserUseCase();
       const { user } = await getUserUseCase.handle({
@@ -45,7 +44,15 @@ export class GithubAuthCallbackController {
 
       const token = await reply.jwtSign({}, { sign: { sub: user.id } });
 
-      // TODO: Update tokens and scopes.
+      // TODO: Encrypt access and refresh tokens before storing them in the database.
+      const updateConnectionUseCase = makeUpdateConnectionUseCase();
+      await updateConnectionUseCase.handle({
+        id: connection.id,
+        newConnectionData: {
+          accessToken: payload.access_token,
+          scope: this.authenticator.config.scopes.join(' '),
+        },
+      });
 
       return reply.status(200).send({ user, connection, token });
     }

@@ -26,4 +26,20 @@ export class PrismaConnectionsRepository implements ConnectionsRepository {
   ): Promise<Connection> {
     return await this.prisma.connection.create({ data });
   }
+
+  public async findById(id: string): Promise<Connection | null> {
+    return await this.prisma.connection.findUnique({ where: { id } });
+  }
+
+  public async update(
+    id: string,
+    data: Prisma.ConnectionUncheckedUpdateInput
+  ): Promise<Connection> {
+    return await this.prisma.connection.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }

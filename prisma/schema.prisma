@@ -43,12 +43,16 @@ model Connection {
 }
 
 model Application {
-  id      String @id @default(cuid())
-  ownerId String @map("owner_id")
-  name    String
+  id          String  @id @default(cuid())
+  ownerId     String  @map("owner_id")
+  containerId String? @map("container_id")
 
-  ram Int
-  cpu Int
+  slug       String
+  repository String
+
+  ram  Int
+  cpu  Int
+  port Int
 
   owner User @relation(fields: [ownerId], references: [id])
 }
