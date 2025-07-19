@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const GITHUB_OAUTH2_URL = 'https://github.com/login';
+const GITHUB_OAUTH2_URL = 'https://github.com/login/oauth';
 const GITHUB_API_URL = 'https://api.github.com';
 
 export interface GithubOAuth2ServiceConfig {
@@ -16,7 +16,7 @@ export interface GithubAccessTokenPayload {
 }
 
 export interface GithubUserPayload {
-  id: string;
+  id: number;
   login: string;
   email: string;
 }
@@ -48,6 +48,7 @@ export class GithubOAuth2Service {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
         },
       }
     );
@@ -56,13 +57,25 @@ export class GithubOAuth2Service {
   }
 
   public async fetchUser(accessToken: string) {
-    const { data } = await axios.get(`${GITHUB_API_URL}/user`, {
+    const { data: user } = await axios.get(`${GITHUB_API_URL}/user`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: 'application/vnd.github+json',
       },
     });
 
-    return data as GithubUserPayload;
+    const { data: emails } = await axios.get(`${GITHUB_API_URL}/user/emails`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+
+    const email = emails.find((e: { primary: boolean }) => e.primary).email;
+
+    return {
+      ...user,
+      email,
+    } as GithubUserPayload;
   }
 }
