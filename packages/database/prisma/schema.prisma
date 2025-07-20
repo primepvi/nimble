@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../generated"
+  output   = "../generated"
 }
 
 datasource db {
@@ -48,16 +48,47 @@ enum ApplicationImage {
 }
 
 model Application {
-  id          Int              @id @default(autoincrement())
-  ownerId     String           @map("owner_id")
-  containerId String?          @map("container_id")
-  image       ApplicationImage
+  id      String @id @default(cuid())
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
 
-  slug       String
+  image      ApplicationImage
+  name       String
+  slug       String           @unique
   repository String
 
   ram Int
-  cpu Int
+  cpu Float
 
-  owner User @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  deploys   Deploy[]
+
+  @@map("applications")
+}
+
+enum DeployStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model Deploy {
+  id            String      @id @default(cuid())
+  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String      @map("application_id")
+  containedId   String?     @map("container_id")
+
+  status DeployStatus @default(PENDING)
+  logs   String?
+  port   Int?
+
+  commitHash String? @map("commit_hash")
+  branch     String?
+
+  createdAt  DateTime  @default(now()) @map("created_at")
+  startedAt  DateTime? @map("started_at")
+  finishedAt DateTime? @map("finished_at")
+
+  @@map("deploys")
 }

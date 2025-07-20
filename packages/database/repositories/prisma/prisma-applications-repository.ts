@@ -1,11 +1,15 @@
-import type { Application, Prisma, PrismaClient } from "../../generated";
-import type { ApplicationsRepository } from "../applications-repository";
+import type { Application, Prisma, PrismaClient } from '../../generated';
+import type { ApplicationsRepository } from '../applications-repository';
 
 export class PrismaApplicationsRepository implements ApplicationsRepository {
   public constructor(private prisma: PrismaClient) {}
 
-  public async findById(id: number): Promise<Application | null> {
+  public async findById(id: string): Promise<Application | null> {
     return await this.prisma.application.findUnique({ where: { id } });
+  }
+
+  public async findBySlug(slug: string): Promise<Application | null> {
+    return await this.prisma.application.findUnique({ where: { slug } });
   }
 
   public async create(

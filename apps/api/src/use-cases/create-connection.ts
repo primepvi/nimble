@@ -1,6 +1,6 @@
-import type { Connection, ConnectionProvider } from "@database/generated";
-import { GenericError } from "@/errors/generic-error";
-import type { ConnectionsRepository } from "@database/repositories/connections-repository";
+import type { Connection, ConnectionProvider } from '@database/generated';
+import type { ConnectionsRepository } from '@database/repositories/connections-repository';
+import { GenericError } from '@/errors/generic-error';
 
 export interface CreateConnectionUseCaseRequest {
   userId: string;
@@ -30,9 +30,11 @@ export class CreateConnectionUseCase {
     if (existsConnectionWithSameAccount) {
       throw new GenericError(
         409,
-        "A connection with this provider account already exists."
+        'A connection with this provider account already exists.'
       );
     }
+
+    // TODO: verify if connection owner exists in db
 
     const connection = await this.connectionsRepository.create(data);
 

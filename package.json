@@ -6,7 +6,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@biomejs/biome": "2.1.1",
+    "@biomejs/biome": "2.1.2",
     "@types/node": "^24.0.13",
     "prisma": "^6.11.1",
     "tsx": "^4.20.3",

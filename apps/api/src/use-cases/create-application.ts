@@ -1,11 +1,12 @@
-import type { Application, ApplicationImage } from "@database/generated";
-import { GenericError } from "@/errors/generic-error";
-import type { ApplicationsRepository } from "@database/repositories/applications-repository";
-import type { UsersRepository } from "@database/repositories/users-repository";
+import type { Application, ApplicationImage } from '@database/generated';
+import type { ApplicationsRepository } from '@database/repositories/applications-repository';
+import type { UsersRepository } from '@database/repositories/users-repository';
+import { GenericError } from '@/errors/generic-error';
 
 export interface CreateApplicationUseCaseRequest {
   ownerId: string;
   image: ApplicationImage;
+  name: string;
   slug: string;
   repository: string;
   ram: number;
@@ -30,12 +31,20 @@ export class CreateApplicationUseCase {
     );
 
     if (!existsOwnerUser) {
-      throw new GenericError(400, "Owner user not found.");
+      throw new GenericError(400, 'Owner user not found.');
     }
 
-    const application = await this.applicationsRepository.create(
-      applicationData
-    );
+    const applicationWithSameSlug =
+      await this.applicationsRepository.findBySlug(applicationData.slug);
+    if (applicationWithSameSlug) {
+      throw new GenericError(
+        409,
+        'Alerady exists an application with same slug.'
+      );
+    }
+
+    const application =
+      await this.applicationsRepository.create(applicationData);
 
     return { application };
   }

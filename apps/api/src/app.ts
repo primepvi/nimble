@@ -18,7 +18,9 @@ app.setErrorHandler(
       return reply.status(400).send({
         error: true,
         statusCode: 400,
-        errors: error.format()._errors,
+        errors: error.issues.map((issue) => {
+          return { key: issue.path[0], message: issue.message };
+        }),
         message: 'Missing body properties.',
       });
     }

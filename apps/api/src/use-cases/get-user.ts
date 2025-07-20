@@ -1,6 +1,6 @@
-import type { User } from "@database/generated";
-import { GenericError } from "@/errors/generic-error";
-import type { UsersRepository } from "@database/repositories/users-repository";
+import type { User } from '@database/generated';
+import type { UsersRepository } from '@database/repositories/users-repository';
+import { GenericError } from '@/errors/generic-error';
 
 export interface GetUserUseCaseRequest {
   id: string;
@@ -16,7 +16,9 @@ export class GetUserUseCase {
     id,
   }: GetUserUseCaseRequest): Promise<GetUserUseCaseResponse> {
     const user = await this.usersRepository.findById(id);
-    if (!user) throw new GenericError(404, `Resource "user" not found.`);
+    if (!user) {
+      throw new GenericError(404, `Resource "user" not found.`);
+    }
 
     return { user };
   }

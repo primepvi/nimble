@@ -1,12 +1,9 @@
-import z from 'zod';
+import z from "zod";
 
 const envSchema = z.object({
-  ENVIRONMENT: z.enum(['dev', 'prod']),
+  ENVIRONMENT: z.enum(["dev", "prod"]),
   PORT: z.coerce.number().default(3333),
   JWT_SECRET: z.string(),
-
-  // Database
-  DATABASE_URL: z.url(),
 
   // DISCORD
   DISCORD_OAUTH2_REDIRECT: z.url(),

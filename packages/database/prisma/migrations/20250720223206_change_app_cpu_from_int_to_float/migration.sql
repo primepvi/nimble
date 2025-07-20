@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "applications" ALTER COLUMN "cpu" SET DATA TYPE DOUBLE PRECISION;
