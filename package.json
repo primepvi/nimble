@@ -1,13 +1,6 @@
 {
   "name": "nimble",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tsx --env-file=.env src/server.ts",
-    "dev:w": "tsx --watch --env-file=.env src/server.ts",
-    "format": "ultracite format",
-    "lint": "ultracite lint"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,12 +14,6 @@
     "ultracite": "5.0.36"
   },
   "dependencies": {
-    "@fastify/jwt": "^9.1.0",
-    "@kauzx/logger": "^1.2.0",
-    "@prisma/client": "^6.11.1",
-    "axios": "^1.10.0",
-    "dockerode": "^4.0.7",
-    "fastify": "^5.4.0",
-    "zod": "^4.0.5"
+    "@prisma/client": "^6.11.1"
   }
 }

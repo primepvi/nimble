@@ -7,8 +7,9 @@
     "strict": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@nimble-prisma/*": ["packages/prisma/*"]
     }
   }
 }
