@@ -3,7 +3,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["apps/api/src/*"],
-      "@database/*": ["packages/database/*"]
+      "@database/*": ["packages/database/*"],
+      "@queue/*": ["packages/queue/src/"]
     }
   }
 }
