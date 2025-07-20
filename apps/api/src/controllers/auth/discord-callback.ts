@@ -1,13 +1,13 @@
-import { ConnectionProvider } from '@prisma/client';
-import type { FastifyReply, FastifyRequest } from 'fastify';
-import z from 'zod';
-import { GenericError } from '@/errors/generic-error';
-import { makeCreateConnectionUseCase } from '@/use-cases/factories/make-create-connection';
-import { makeCreateUserUseCase } from '@/use-cases/factories/make-create-user';
-import { makeFindConnectionByAccountUseCase } from '@/use-cases/factories/make-find-connection-by-account';
-import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user';
-import { makeUpdateConnectionUseCase } from '@/use-cases/factories/make-update-connection';
-import type { DiscordOAuth2Service } from '../../services/discord-oauth2';
+import { ConnectionProvider } from "@database/generated";
+import type { FastifyReply, FastifyRequest } from "fastify";
+import z from "zod";
+import { GenericError } from "@/errors/generic-error";
+import { makeCreateConnectionUseCase } from "@/use-cases/factories/make-create-connection";
+import { makeCreateUserUseCase } from "@/use-cases/factories/make-create-user";
+import { makeFindConnectionByAccountUseCase } from "@/use-cases/factories/make-find-connection-by-account";
+import { makeGetUserUseCase } from "@/use-cases/factories/make-get-user";
+import { makeUpdateConnectionUseCase } from "@/use-cases/factories/make-update-connection";
+import type { DiscordOAuth2Service } from "../../services/discord-oauth2";
 
 const callbackSchema = z.object({
   code: z.string(),
@@ -26,7 +26,7 @@ export class DiscordAuthCallbackController {
     if (!email) {
       throw new GenericError(
         400,
-        'This Discord account does not have an associated email address.'
+        "This Discord account does not have an associated email address."
       );
     }
 
@@ -52,7 +52,7 @@ export class DiscordAuthCallbackController {
           accessToken: payload.access_token,
           refreshToken: payload.refresh_token,
           expiresAt: new Date(Date.now() + payload.expires_in * 1000),
-          scope: this.authenticator.config.scopes.join(' '),
+          scope: this.authenticator.config.scopes.join(" "),
         },
       });
 
@@ -74,7 +74,7 @@ export class DiscordAuthCallbackController {
         expiresAt: new Date(Date.now() + payload.expires_in * 1000),
         provider: ConnectionProvider.Discord,
         providerAccountId: id,
-        scope: this.authenticator.config.scopes.join(' '),
+        scope: this.authenticator.config.scopes.join(" "),
       });
 
     return reply.status(201).send({

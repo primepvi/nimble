@@ -1,6 +1,6 @@
-import type { Connection, ConnectionProvider } from '@prisma/client';
-import { GenericError } from '@/errors/generic-error';
-import type { ConnectionsRepository } from '@/repositories/connections-repository';
+import type { Connection, ConnectionProvider } from "@database/generated";
+import { GenericError } from "@/errors/generic-error";
+import type { ConnectionsRepository } from "@database/repositories/connections-repository";
 
 export interface CreateConnectionUseCaseRequest {
   userId: string;
@@ -30,7 +30,7 @@ export class CreateConnectionUseCase {
     if (existsConnectionWithSameAccount) {
       throw new GenericError(
         409,
-        'A connection with this provider account already exists.'
+        "A connection with this provider account already exists."
       );
     }
 

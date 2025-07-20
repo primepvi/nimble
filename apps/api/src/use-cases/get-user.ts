@@ -1,6 +1,6 @@
-import type { User } from '@prisma/client';
-import { GenericError } from '@/errors/generic-error';
-import type { UsersRepository } from '@/repositories/users-repository';
+import type { User } from "@database/generated";
+import { GenericError } from "@/errors/generic-error";
+import type { UsersRepository } from "@database/repositories/users-repository";
 
 export interface GetUserUseCaseRequest {
   id: string;

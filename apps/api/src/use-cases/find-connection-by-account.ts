@@ -1,5 +1,5 @@
-import type { Connection, ConnectionProvider } from '@prisma/client';
-import type { ConnectionsRepository } from '@/repositories/connections-repository';
+import type { Connection, ConnectionProvider } from "@database/generated";
+import type { ConnectionsRepository } from "@database/repositories/connections-repository";
 
 export interface FindConnectionByAccountUseCaseRequest {
   provider: ConnectionProvider;

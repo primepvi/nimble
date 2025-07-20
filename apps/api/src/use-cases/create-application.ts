@@ -1,7 +1,7 @@
-import type { Application, ApplicationImage } from '@prisma/client';
-import { GenericError } from '@/errors/generic-error';
-import type { ApplicationsRepository } from '@/repositories/applications-repository';
-import type { UsersRepository } from '@/repositories/users-repository';
+import type { Application, ApplicationImage } from "@database/generated";
+import { GenericError } from "@/errors/generic-error";
+import type { ApplicationsRepository } from "@database/repositories/applications-repository";
+import type { UsersRepository } from "@database/repositories/users-repository";
 
 export interface CreateApplicationUseCaseRequest {
   ownerId: string;
@@ -30,11 +30,12 @@ export class CreateApplicationUseCase {
     );
 
     if (!existsOwnerUser) {
-      throw new GenericError(400, 'Owner user not found.');
+      throw new GenericError(400, "Owner user not found.");
     }
 
-    const application =
-      await this.applicationsRepository.create(applicationData);
+    const application = await this.applicationsRepository.create(
+      applicationData
+    );
 
     return { application };
   }

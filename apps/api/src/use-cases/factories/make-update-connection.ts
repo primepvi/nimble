@@ -1,6 +1,6 @@
-import { PrismaConnectionsRepository } from '@/repositories/prisma/prisma-connections-repository';
-import { PrismaService } from '@/services';
-import { UpdateConnectionUseCase } from '../update-connection';
+import { PrismaConnectionsRepository } from "@database/repositories/prisma/prisma-connections-repository";
+import { PrismaService } from "@/services";
+import { UpdateConnectionUseCase } from "../update-connection";
 
 export function makeUpdateConnectionUseCase() {
   const connectionsRepository = new PrismaConnectionsRepository(PrismaService);
