@@ -1,2 +1,2 @@
 export * from './queues';
-export type * from './types';
+export * from './types';

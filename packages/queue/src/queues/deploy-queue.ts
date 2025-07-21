@@ -1,5 +1,5 @@
 import { type Job, Queue, Worker } from 'bullmq';
-import type { QueueConnection } from '@/types';
+import type { QueueConnection } from '../types';
 
 export interface DeployQueuePayload {
   applicationSlug: string;
@@ -25,6 +25,7 @@ export class DeployQueue {
   public createWorker(runner: DeployQueueProcessRunner) {
     const worker = new Worker('deploy', runner, {
       connection: this.connection,
+      autorun: false,
     });
 
     return worker;
