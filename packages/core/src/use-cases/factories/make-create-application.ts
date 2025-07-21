@@ -1,15 +1,13 @@
+import type { PrismaClient } from '@database/generated';
 import {
   PrismaApplicationsRepository,
   PrismaUsersRepository,
 } from '@database/repositories/prisma';
-import { PrismaService } from '@/services';
 import { CreateApplicationUseCase } from '../create-application';
 
-export function makeCreateApplicationUseCase() {
-  const applicationsRepository = new PrismaApplicationsRepository(
-    PrismaService
-  );
-  const usersRepository = new PrismaUsersRepository(PrismaService);
+export function makeCreateApplicationUseCase(database: PrismaClient) {
+  const applicationsRepository = new PrismaApplicationsRepository(database);
+  const usersRepository = new PrismaUsersRepository(database);
   const useCase = new CreateApplicationUseCase(
     applicationsRepository,
     usersRepository

@@ -1,6 +1,6 @@
-import type { Connection } from "@database/generated";
-import { GenericError } from "@/errors/generic-error";
-import type { ConnectionsRepository } from "@database/repositories/connections-repository";
+import type { Connection } from '@database/generated';
+import type { ConnectionsRepository } from '@database/repositories/connections-repository';
+import { GenericError } from '../errors/generic-error';
 
 export interface UpdateConnectionUseCaseRequest {
   id: string;

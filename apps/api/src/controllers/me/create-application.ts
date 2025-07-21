@@ -1,7 +1,8 @@
+import { makeCreateApplicationUseCase } from '@core/use-cases/factories/make-create-application';
 import { ApplicationImage } from '@database/generated';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
-import { makeCreateApplicationUseCase } from '@/use-cases/factories/make-create-application';
+import { PrismaService } from '@/services';
 
 const createApplicationBodySchema = z.object({
   image: z.enum(ApplicationImage),
@@ -19,7 +20,8 @@ export class CreateApplicationController {
 
     // TODO: validate if is a valid github repository
 
-    const createApplicationUseCase = makeCreateApplicationUseCase();
+    const createApplicationUseCase =
+      makeCreateApplicationUseCase(PrismaService);
     const { application } = await createApplicationUseCase.handle({
       ...parsedBody,
       ownerId,

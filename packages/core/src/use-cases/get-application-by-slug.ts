@@ -1,6 +1,6 @@
 import type { Application } from '@database/generated';
 import type { ApplicationsRepository } from '@database/repositories/applications-repository';
-import { GenericError } from '@/errors/generic-error';
+import { GenericError } from '../errors/generic-error';
 
 export interface GetApplicationBySlugUseCaseRequest {
   slug: string;

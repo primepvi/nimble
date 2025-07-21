@@ -48,7 +48,7 @@ enum ApplicationImage {
 }
 
 model Application {
-  id      String @id @default(cuid())
+  id      Int    @id @default(autoincrement())
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
@@ -76,12 +76,12 @@ enum DeployStatus {
 model Deploy {
   id            String      @id @default(cuid())
   application   Application @relation(fields: [applicationId], references: [id])
-  applicationId String      @map("application_id")
+  applicationId Int         @map("application_id")
   containedId   String?     @map("container_id")
 
   status DeployStatus @default(PENDING)
   logs   String?
-  port   Int?
+  port   Int
 
   commitHash String? @map("commit_hash")
   branch     String?

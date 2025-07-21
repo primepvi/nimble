@@ -4,7 +4,9 @@
     "paths": {
       "@/*": ["apps/deploy-worker/src/*"],
       "@database/*": ["packages/database/*"],
-      "@queue": ["packages/queue/src/"]
+      "@queue": ["packages/queue/src/"],
+      "@core/*": ["packages/core/src/*"],
+      "@docker": ["packages/docker/src/"]
     }
   }
 }

@@ -5,7 +5,7 @@ export class PrismaDeploysRepository implements DeploysRepository {
   public constructor(private prisma: PrismaClient) {}
 
   public async findApplicationActiveDeploy(
-    applicationId: string
+    applicationId: number
   ): Promise<Deploy | null> {
     return await this.prisma.deploy.findFirst({
       where: {
@@ -15,9 +15,23 @@ export class PrismaDeploysRepository implements DeploysRepository {
     });
   }
 
+  public async findById(id: string): Promise<Deploy | null> {
+    return await this.prisma.deploy.findUnique({ where: { id } });
+  }
+
   public async create(
     data: Prisma.DeployUncheckedCreateInput
   ): Promise<Deploy> {
     return await this.prisma.deploy.create({ data });
+  }
+
+  public async update(
+    id: string,
+    data: Prisma.DeployUncheckedUpdateInput
+  ): Promise<Deploy> {
+    return await this.prisma.deploy.update({
+      where: { id },
+      data,
+    });
   }
 }

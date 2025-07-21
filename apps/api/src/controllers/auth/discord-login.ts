@@ -1,5 +1,5 @@
+import type { DiscordOAuth2Service } from '@core/services/discord-oauth2';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { DiscordOAuth2Service } from '../../services/discord-oauth2';
 
 export class DiscordAuthLoginController {
   public constructor(public authenticator: DiscordOAuth2Service) {}

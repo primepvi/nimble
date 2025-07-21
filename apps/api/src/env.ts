@@ -1,7 +1,7 @@
-import z from "zod";
+import z from 'zod';
 
 const envSchema = z.object({
-  ENVIRONMENT: z.enum(["dev", "prod"]),
+  ENVIRONMENT: z.enum(['dev', 'prod']),
   PORT: z.coerce.number().default(3333),
   JWT_SECRET: z.string(),
 
@@ -14,6 +14,10 @@ const envSchema = z.object({
   GITHUB_OAUTH2_REDIRECT: z.url(),
   GITHUB_CLIENT_SECRET: z.string(),
   GITHUB_CLIENT_ID: z.string(),
+
+  // Redis Queue Connection
+  DEPLOY_QUEUE_HOST: z.string(),
+  DEPLOY_QUEUE_PORT: z.coerce.number(),
 });
 
 const _env = envSchema.safeParse(process.env);

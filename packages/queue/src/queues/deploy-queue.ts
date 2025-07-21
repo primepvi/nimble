@@ -3,6 +3,7 @@ import type { QueueConnection } from '../types';
 
 export interface DeployQueuePayload {
   applicationSlug: string;
+  deployId: string;
 }
 
 export type DeployQueueProcessRunner = (

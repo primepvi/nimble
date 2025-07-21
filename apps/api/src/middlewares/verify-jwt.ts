@@ -1,5 +1,5 @@
+import { GenericError } from '@core/errors/generic-error';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { GenericError } from '@/errors/generic-error';
 
 export async function verifyJwt(request: FastifyRequest, _: FastifyReply) {
   try {

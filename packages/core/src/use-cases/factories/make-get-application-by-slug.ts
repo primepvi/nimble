@@ -1,11 +1,9 @@
+import type { PrismaClient } from '@database/generated';
 import { PrismaApplicationsRepository } from '@database/repositories/prisma';
-import { PrismaService } from '@/services';
 import { GetApplicationBySlugUseCase } from '../get-application-by-slug';
 
-export function makeGetApplicationBySlugUseCase() {
-  const applicationsRepository = new PrismaApplicationsRepository(
-    PrismaService
-  );
+export function makeGetApplicationBySlugUseCase(database: PrismaClient) {
+  const applicationsRepository = new PrismaApplicationsRepository(database);
   const useCase = new GetApplicationBySlugUseCase(applicationsRepository);
   return useCase;
 }

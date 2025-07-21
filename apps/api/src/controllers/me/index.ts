@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { verifyJwt } from '@/middlewares/verify-jwt';
 import { bindHandler } from '@/utils/bind-handler';
 import { CreateApplicationController } from './create-application';
+import { CreateDeployController } from './create-deploy';
 import { GetApplicationController } from './get-application';
 import { MeProfileController } from './profile';
 
@@ -14,7 +15,9 @@ export async function MeRoutes(app: FastifyInstance) {
   // Applications
   const createApplicationController = new CreateApplicationController();
   const getApplicationController = new GetApplicationController();
+  const createDeployController = new CreateDeployController();
 
   app.post('/me/apps', bindHandler(createApplicationController));
   app.get('/me/apps/:slug', bindHandler(getApplicationController));
+  app.post('/me/apps/:slug/deploy', bindHandler(createDeployController));
 }

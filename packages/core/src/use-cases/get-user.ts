@@ -1,6 +1,6 @@
 import type { User } from '@database/generated';
 import type { UsersRepository } from '@database/repositories/users-repository';
-import { GenericError } from '@/errors/generic-error';
+import { GenericError } from '../errors/generic-error';
 
 export interface GetUserUseCaseRequest {
   id: string;

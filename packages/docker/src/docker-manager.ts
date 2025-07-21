@@ -30,19 +30,22 @@ export class DockerManager {
 
   private async pullImage(imageName: string) {
     return new Promise<void>((resolve, reject) => {
-      this.docker.pull(imageName, (pullErr: never, stream) => {
-        if (pullErr) {
-          return reject(pullErr);
-        }
-
-        this.docker.modem.followProgress(stream, (err: never) => {
-          if (err) {
-            return reject(err);
+      this.docker.pull(
+        imageName,
+        (pullErr: never, stream: NodeJS.ReadableStream) => {
+          if (pullErr) {
+            return reject(pullErr);
           }
 
-          return resolve();
-        });
-      });
+          this.docker.modem.followProgress(stream, (err) => {
+            if (err) {
+              return reject(err);
+            }
+
+            return resolve();
+          });
+        }
+      );
     });
   }
 
@@ -57,6 +60,9 @@ export class DockerManager {
       HostConfig: {
         PortBindings: {
           [`${config.containerPort}/tcp`]: [{ HostPort: config.hostPort }],
+        },
+        RestartPolicy: {
+          Name: 'unless-stopped',
         },
       },
     });

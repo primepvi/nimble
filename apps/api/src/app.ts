@@ -1,3 +1,4 @@
+import { GenericError } from '@core/errors/generic-error';
 import fastifyJwt from '@fastify/jwt';
 import type { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import fastify from 'fastify';
@@ -5,7 +6,6 @@ import { ZodError } from 'zod';
 import { AuthRoutes } from './controllers/auth';
 import { MeRoutes } from './controllers/me';
 import { env } from './env';
-import { GenericError } from './errors/generic-error';
 
 export const app = fastify();
 app.register(fastifyJwt, { secret: env.JWT_SECRET });

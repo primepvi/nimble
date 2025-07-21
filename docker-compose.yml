@@ -8,3 +8,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: nimble
+
+  redis:
+    image: redis:latest
+    container_name: nimble-redis
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes

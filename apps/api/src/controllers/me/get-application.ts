@@ -1,7 +1,8 @@
+import { GenericError } from '@core/errors/generic-error';
+import { makeGetApplicationBySlugUseCase } from '@core/use-cases/factories/make-get-application-by-slug';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
-import { GenericError } from '@/errors/generic-error';
-import { makeGetApplicationBySlugUseCase } from '@/use-cases/factories/make-get-application-by-slug';
+import { PrismaService } from '@/services';
 
 const getApplicationParamsSchema = z.object({
   slug: z.string(),
@@ -12,7 +13,8 @@ export class GetApplicationController {
     const ownerId = request.user.sub;
     const { slug } = getApplicationParamsSchema.parse(request.params);
 
-    const getApplicationBySlugUseCase = makeGetApplicationBySlugUseCase();
+    const getApplicationBySlugUseCase =
+      makeGetApplicationBySlugUseCase(PrismaService);
     const { application } = await getApplicationBySlugUseCase.handle({
       slug,
     });

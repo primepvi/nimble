@@ -1,7 +1,7 @@
 import type { Application, ApplicationImage } from '@database/generated';
 import type { ApplicationsRepository } from '@database/repositories/applications-repository';
 import type { UsersRepository } from '@database/repositories/users-repository';
-import { GenericError } from '@/errors/generic-error';
+import { GenericError } from '../errors/generic-error';
 
 export interface CreateApplicationUseCaseRequest {
   ownerId: string;
