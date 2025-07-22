@@ -22,7 +22,7 @@ export class FetchUserApplicationsUseCase {
     userId,
     page = 1,
   }: FetchUserApplicationsUseCaseRequest): Promise<FetchUserApplicationsUseCaseResponse> {
-    page = Math.min(1, page);
+    page = Math.max(1, page);
 
     const userExists = await this.usersRepository.findById(userId);
     if (!userExists) {

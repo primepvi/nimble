@@ -12,6 +12,8 @@ export class FetchApplicationsController {
     const { page } = fetchApplicationsQuerySchema.parse(request.query);
     const userId = request.user.sub;
 
+    console.log(page);
+
     const fetchUserApplicationsUseCase =
       makeFetchUserApplicationsUseCase(PrismaService);
     const { applications } = await fetchUserApplicationsUseCase.handle({
