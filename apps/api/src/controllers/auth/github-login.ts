@@ -1,5 +1,5 @@
-import type { FastifyReply, FastifyRequest } from "fastify";
-import type { GithubOAuth2Service } from "@/services/github-oauth2";
+import type { GithubOAuth2Service } from '@core/services/github-oauth2';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 export class GithubAuthLoginController {
   public constructor(public authenticator: GithubOAuth2Service) {}
