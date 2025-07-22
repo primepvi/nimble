@@ -1,5 +1,8 @@
 import Docker = require('dockerode');
 
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { ApplicationImage } from '../../database/generated';
 import type { DockerContainerConfig } from './types';
 
@@ -9,9 +12,11 @@ const DOCKER_IMAGES: Record<ApplicationImage, string> = {
 
 export class DockerManager {
   private docker: Docker;
+  public dataPath: string;
 
-  public constructor(socketPath = '/var/run/docker.sock') {
+  public constructor(projectRoot: string, socketPath = '/var/run/docker.sock') {
     this.docker = new Docker({ socketPath });
+    this.dataPath = path.resolve(projectRoot, '.nimble');
   }
 
   public async init() {
@@ -28,7 +33,7 @@ export class DockerManager {
     }
   }
 
-  private async pullImage(imageName: string) {
+  public async pullImage(imageName: string) {
     return new Promise<void>((resolve, reject) => {
       this.docker.pull(
         imageName,
@@ -50,6 +55,23 @@ export class DockerManager {
   }
 
   public async createContainer(config: DockerContainerConfig) {
+    const binds: string[] = [];
+
+    if (config.volumePath) {
+      const containerDataPath = path.resolve(
+        this.dataPath,
+        'containers',
+        config.name,
+        'data'
+      );
+
+      if (!fs.existsSync(containerDataPath)) {
+        fs.mkdirSync(containerDataPath, { recursive: true });
+      }
+
+      binds.push(`${containerDataPath}:${config.volumePath}`);
+    }
+
     const container = await this.docker.createContainer({
       name: config.name,
       Image: DOCKER_IMAGES[config.image],
@@ -58,11 +80,9 @@ export class DockerManager {
         [`${config.containerPort}/tcp`]: {},
       },
       HostConfig: {
+        Binds: binds,
         PortBindings: {
           [`${config.containerPort}/tcp`]: [{ HostPort: config.hostPort }],
-        },
-        RestartPolicy: {
-          Name: 'unless-stopped',
         },
       },
     });

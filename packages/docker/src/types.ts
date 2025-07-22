@@ -6,4 +6,5 @@ export interface DockerContainerConfig {
   cmd: string[];
   containerPort: string;
   hostPort: string;
+  volumePath?: string;
 }

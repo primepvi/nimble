@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { verifyJwt } from '@/middlewares/verify-jwt';
+import { GithubAuthenticator } from '@/services';
 import { bindHandler } from '@/utils/bind-handler';
 import { CreateApplicationController } from './create-application';
 import { CreateDeployController } from './create-deploy';
@@ -13,7 +14,9 @@ export async function MeRoutes(app: FastifyInstance) {
   app.get('/me', bindHandler(profileController));
 
   // Applications
-  const createApplicationController = new CreateApplicationController();
+  const createApplicationController = new CreateApplicationController(
+    GithubAuthenticator
+  );
   const getApplicationController = new GetApplicationController();
   const createDeployController = new CreateDeployController();
 

@@ -6,5 +6,6 @@ export * from './factories/make-find-connection-by-account';
 export * from './factories/make-get-application-by-slug';
 export * from './factories/make-get-deploy';
 export * from './factories/make-get-user';
+export * from './factories/make-get-user-connection';
 export * from './factories/make-update-connection';
 export * from './factories/make-update-deploy';

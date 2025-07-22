@@ -1,8 +1,18 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
-data/
+
+# Local development files
 .vscode/
+
+# Package manager files
 package-lock.json
 pnpm-lock.yaml
 
-packages/database/generated
+# Nimble data files
+.nimble/
+
+# Database generated files
+packages/database/generated/

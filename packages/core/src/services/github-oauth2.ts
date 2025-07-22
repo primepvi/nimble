@@ -21,6 +21,13 @@ export interface GithubUserPayload {
   email: string;
 }
 
+export interface GithubRepositoryPayload {
+  id: number;
+  name: string;
+  full_name: string;
+  owner: Omit<GithubUserPayload, 'email'>;
+}
+
 export class GithubOAuth2Service {
   public constructor(public config: GithubOAuth2ServiceConfig) {}
 
@@ -77,5 +84,16 @@ export class GithubOAuth2Service {
       ...user,
       email,
     } as GithubUserPayload;
+  }
+
+  public async fetchRepositories(accessToken: string) {
+    const { data } = await axios.get(`${GITHUB_API_URL}/user/repos`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+
+    return data as GithubRepositoryPayload[];
   }
 }

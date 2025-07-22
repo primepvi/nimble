@@ -43,8 +43,9 @@ export const worker = queue.createWorker(async (job) => {
       image: application.image,
       containerPort: String(3000),
       hostPort: String(deploy.port),
-      cmd: ['node'],
+      cmd: ['node', '-e', 'console.log("Hello from container")'],
       name: `nimble-container-${application.slug}`,
+      volumePath: '/app/data',
     });
 
     await container.start();

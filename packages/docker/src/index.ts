@@ -1,4 +1,6 @@
+import path from 'node:path';
 import { DockerManager } from './docker-manager';
 
-export const DockerService = new DockerManager();
+const projectRootPath = path.resolve(__dirname, '../../../');
+export const DockerService = new DockerManager(projectRootPath);
 DockerService.init();

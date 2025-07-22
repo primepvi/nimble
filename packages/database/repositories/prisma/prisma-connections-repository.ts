@@ -3,8 +3,8 @@ import type {
   ConnectionProvider,
   Prisma,
   PrismaClient,
-} from "../../generated";
-import type { ConnectionsRepository } from "../connections-repository";
+} from '../../generated';
+import type { ConnectionsRepository } from '../connections-repository';
 
 export class PrismaConnectionsRepository implements ConnectionsRepository {
   public constructor(private prisma: PrismaClient) {}
@@ -17,6 +17,18 @@ export class PrismaConnectionsRepository implements ConnectionsRepository {
       where: {
         providerAccountId: accountId,
         provider,
+      },
+    });
+  }
+
+  public async findByProviderAndUserId(
+    provider: ConnectionProvider,
+    userId: string
+  ): Promise<Connection | null> {
+    return await this.prisma.connection.findFirst({
+      where: {
+        provider,
+        userId,
       },
     });
   }
