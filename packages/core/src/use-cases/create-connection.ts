@@ -1,5 +1,6 @@
 import type { Connection, ConnectionProvider } from '@database/generated';
 import type { ConnectionsRepository } from '@database/repositories/connections-repository';
+import type { UsersRepository } from '@database/repositories/users-repository';
 import { GenericError } from '../errors/generic-error';
 
 export interface CreateConnectionUseCaseRequest {
@@ -17,7 +18,10 @@ export interface CreateConnectionUseCaseResponse {
 }
 
 export class CreateConnectionUseCase {
-  public constructor(private connectionsRepository: ConnectionsRepository) {}
+  public constructor(
+    private connectionsRepository: ConnectionsRepository,
+    private usersRepository: UsersRepository
+  ) {}
   public async handle(
     data: CreateConnectionUseCaseRequest
   ): Promise<CreateConnectionUseCaseResponse> {
@@ -34,7 +38,10 @@ export class CreateConnectionUseCase {
       );
     }
 
-    // TODO: verify if connection owner exists in db
+    const ownerExists = await this.usersRepository.findById(data.userId);
+    if (!ownerExists) {
+      throw new GenericError(400, 'Resource "user" not found.');
+    }
 
     const connection = await this.connectionsRepository.create(data);
 
