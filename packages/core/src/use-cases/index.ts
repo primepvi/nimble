@@ -2,6 +2,7 @@ export * from './factories/make-create-application';
 export * from './factories/make-create-connection';
 export * from './factories/make-create-deploy';
 export * from './factories/make-create-user';
+export * from './factories/make-fetch-user-application-deploys';
 export * from './factories/make-fetch-user-applications';
 export * from './factories/make-find-connection-by-account';
 export * from './factories/make-get-application-by-slug';
